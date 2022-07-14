@@ -22,8 +22,5 @@ def upload_file():
     return render_template("process.html")
 
 
-if __name__ == '__main__':
-     
-        
-    app.run('localhost', 4442)
+
     
