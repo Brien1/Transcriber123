@@ -22,10 +22,13 @@ def upload_file():
     return render_template("process.html")
 
 
-def run():
+def run(environ, start_response):
     if __name__ == '__main__':
+        response_headers = [
+        ('Content-type', 'text/plain'),
+        ('Content-Length', str(len(data)))
+        ]
+        start_response(status, response_headers)
         
-        
-       return app.run('localhost', 4442)
+        return app.run('localhost', 4442)
     
-run()
