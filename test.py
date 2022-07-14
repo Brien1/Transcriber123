@@ -1,1 +1,2 @@
-print("py")
+def app():
+    print("py")
