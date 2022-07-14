@@ -1,2 +1,2 @@
 def app():
-    print("py")
+    return "py"
