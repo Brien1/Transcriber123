@@ -6,7 +6,8 @@ import pickle
 import sklearn
 CURRENTDIR = os.path.dirname(os.path.realpath(__file__))
 PARENTDIR = os.path.dirname(CURRENTDIR)
-sys.path.append(PARENTDIR)
+p = os.path.abspath('.')
+sys.path.insert(1, p)
 from model import pre_process, post_process
 print()
 UPLOAD_FOLDER = "user_loaded_content"
