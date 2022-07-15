@@ -7,8 +7,7 @@ import sklearn
 CURRENTDIR = os.path.dirname(os.path.realpath(__file__))
 PARENTDIR = os.path.dirname(CURRENTDIR)
 sys.path += [PARENTDIR,]
-
-# print(sys.path)
+print(PARENTDIR+"/new_image.png")
 from model import postprocess, preprocess
 
 
@@ -26,10 +25,10 @@ def upload_file():
     f= request.files.get("file1")
     uploaded_audio = app.config["UPLOAD_FOLDER"]+"/temp"
     f.save(uploaded_audio)
-    run_file_in_trained_model(uploaded_audio)
+    image_path = run_file_in_trained_model(uploaded_audio)
 
 
-    return render_template("process.html")
+    return render_template("process.html", image = image_path)
 
 def run_file_in_trained_model(uploaded_audio_path):
     loaded_model = pickle.load(open(MODEL, 'rb'))
@@ -38,6 +37,6 @@ def run_file_in_trained_model(uploaded_audio_path):
     audio_list.append(audio)
     audio_list_resized = preprocess.resizeaudio(audio_list,False)
     output = loaded_model.predict(audio_list_resized)
-    postprocess.show_predicted_image(output)
+    return PARENTDIR + "/" + postprocess.show_predicted_image(output)
 
     

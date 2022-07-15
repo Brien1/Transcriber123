@@ -10,3 +10,4 @@ def show_predicted_image(y_predict):
     with open ("new_image.png","bw") as tempwrite:
         tempwrite.write(base64.b64decode(y_predict))
     plt.imshow(plt.imread(fname="new_image.png"))
+    return "new_image.png"
