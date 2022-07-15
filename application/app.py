@@ -6,10 +6,12 @@ import pickle
 import sklearn
 CURRENTDIR = os.path.dirname(os.path.realpath(__file__))
 PARENTDIR = os.path.dirname(CURRENTDIR)
-p = os.path.abspath('.')
-sys.path.insert(1, p)
-from model import pre_process, post_process
-print()
+sys.path += [PARENTDIR,]
+
+# print(sys.path)
+from model import postprocess, preprocess
+
+
 UPLOAD_FOLDER = "user_loaded_content"
 MYDIR = os.path.dirname(__file__)
 MODEL = os.path.join(PARENTDIR,"model/model.pkl")
@@ -31,11 +33,11 @@ def upload_file():
 
 def run_file_in_trained_model(uploaded_audio_path):
     loaded_model = pickle.load(open(MODEL, 'rb'))
-    audio, sr = pre_process.loadaudio(uploaded_audio_path)
+    audio, sr = preprocess.loadaudio(uploaded_audio_path)
     audio_list = []
     audio_list.append(audio)
-    audio_list_resized = pre_process.resizeaudio(audio_list,False)
+    audio_list_resized = preprocess.resizeaudio(audio_list,False)
     output = loaded_model.predict(audio_list_resized)
-    post_process.show_predicted_image(output)
+    postprocess.show_predicted_image(output)
 
     
