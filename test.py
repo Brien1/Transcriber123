@@ -7,7 +7,4 @@
 #         ('Content-Length', str(len(data)))
 #     ]
 #     start_response(status, response_headers)
-#     return iter([data])
-
-
-import soundfile
+#     return iter
