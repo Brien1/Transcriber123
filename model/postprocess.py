@@ -7,7 +7,7 @@ def show_predicted_image(y_predict):
     Args:
         y_predict (ndarray): Shape is (1,), a single string contained within a np.array
     """
-    with open ("new_image.png","bw") as tempwrite:
+    with open ("static/new_image.png","bw") as tempwrite:
         tempwrite.write(base64.b64decode(y_predict))
-    plt.imshow(plt.imread(fname="new_image.png"))
-    return "new_image.png"
+    return "static/new_image.png"
+    
