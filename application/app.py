@@ -6,6 +6,7 @@ import pickle
 import sklearn
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import librosa
 
 CURRENTDIR = os.path.dirname(os.path.realpath(__file__))
 PARENTDIR = os.path.dirname(CURRENTDIR)
@@ -46,7 +47,7 @@ def run_file_in_trained_model(uploaded_audio_path):
         base64 string: decode for png/ jpg etc.
     """
     loaded_model = pickle.load(open(MODEL, 'rb'))
-    audio, sr = preprocess.loadaudio(uploaded_audio_path)
+    audio, sr = librosa.load(uploaded_audio_path)
     audio_list = []
     audio_list.append(audio)
     audio_list_resized = preprocess.resizeaudio(audio_list,False)

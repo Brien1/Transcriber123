@@ -18,14 +18,4 @@ def resizeaudio(audio, max_l):
         audio = [librosa.util.fix_length(f, min(audio_lengths)) for f in audio]
         
     return audio
-def loadaudio(path):
-    """_summary_
 
-    Args:
-        path (string): path
-
-    Returns:
-        audio (numpy bytes), sample_rate: returns an object and int, the decoded audio and the int sample rate
-    """
-    
-    return librosa.load(path)
