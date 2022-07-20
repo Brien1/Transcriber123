@@ -17,7 +17,9 @@ from model import postprocess, preprocess
 
 UPLOAD_FOLDER = "user_loaded_content"
 MYDIR = os.path.dirname(__file__)
-MODEL = os.path.join(PARENTDIR,"model/model.pkl")
+MODEL1 = os.path.join(PARENTDIR,"model/model1.pkl")
+MODEL2 = os.path.join(PARENTDIR,"model/model2.pkl")
+
 app = Flask(__name__)
 # print(app.static_url_path)
 # app.static_url_path = PARENTDIR+"/static"
@@ -46,7 +48,10 @@ def run_file_in_trained_model(uploaded_audio_path):
     Returns:
         base64 string: decode for png/ jpg etc.
     """
-    loaded_model = pickle.load(open(MODEL, 'rb'))
+    f1=pickle.load(open("/Users/brienhall/Documents/Transcriber123/model/model1.pkl","rb"))
+    f2=pickle.load(open("/Users/brienhall/Documents/Transcriber123/model/model2.pkl","rb"))
+    model_byte_string = f1+ f2
+    loaded_model = pickle.loads(model_byte_string)    
     audio, sr = librosa.load(uploaded_audio_path)
     audio_list = []
     audio_list.append(audio)
