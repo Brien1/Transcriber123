@@ -48,8 +48,8 @@ def run_file_in_trained_model(uploaded_audio_path):
     Returns:
         base64 string: decode for png/ jpg etc.
     """
-    f1=pickle.load(open("/Users/brienhall/Documents/Transcriber123/model/model1.pkl","rb"))
-    f2=pickle.load(open("/Users/brienhall/Documents/Transcriber123/model/model2.pkl","rb"))
+    f1=pickle.load(open(MODEL1,"rb"))
+    f2=pickle.load(open(MODEL2,"rb"))
     model_byte_string = f1+ f2
     loaded_model = pickle.loads(model_byte_string)    
     audio, sr = librosa.load(uploaded_audio_path)
