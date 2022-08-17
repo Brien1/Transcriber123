@@ -33,6 +33,7 @@ def index():
 
 @app.route("/" , methods=['GET', 'POST'])
 def upload_file():
+    
     f= request.files.get("file1")
     uploaded_audio = app.config["UPLOAD_FOLDER"]+"/temp"
     f.save(uploaded_audio)
