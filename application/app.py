@@ -1,3 +1,4 @@
+from crypt import methods
 import sys
 import os
 from flask import Flask, request, redirect, url_for,render_template,send_from_directory, send_file, abort
@@ -59,10 +60,25 @@ def run_file_in_trained_model(uploaded_audio_path):
     output = loaded_model.predict(audio_list_resized)
     return output
 
-@app.route('/<path:filename>')
-def download_file(filename):
+@app.route('/<path:filename>', methods=['GET'])
+def download_file(filename, attachment=False):
     try:
+        print("here")
+        print(request.args.get('attachment'))
+     
         filename=os.path.join(app.root_path, filename)
-        return send_file(filename)
+        if attachment == False:
+            return send_file(filename)
+        if attachment:
+            return send_file(filename,as_attachment=True)
     except FileNotFoundError:
         abort(404)
+        
+@app.route('/download')        
+def send_image():
+    print(request.args.get('filename'))
+    filename = request.args.get('filename')
+    filename = filename.strip("/")
+    filename=os.path.join(app.root_path, filename)
+    print(filename)
+    return send_file(filename,as_attachment=True)
