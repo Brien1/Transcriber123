@@ -1,3 +1,5 @@
+import base64 as b64
+import numpy as np
 import fileinput
 from http import client
 import unittest
@@ -8,7 +10,7 @@ CURRENTDIR = os.path.dirname(os.path.realpath(__file__))
 PARENTDIR = os.path.dirname(CURRENTDIR)
 ROOTDIR = os.path.dirname(PARENTDIR)
 sys.path += [PARENTDIR,]
-from application.app import app
+from application.app import app, run_file_in_trained_model
 from jinja2 import Environment, PackageLoader, select_autoescape, FunctionLoader as fl, FileSystemLoader
 from werkzeug.datastructures import FileStorage
 from flask import render_template, url_for
@@ -64,7 +66,22 @@ class AppTestCase(unittest.TestCase):
        
         assert from_file == response_to_upload
   
-            
+    def test_run_trained_model(self):
+        file = os.path.join(CURRENTDIR, "A0-test.mp3")
+        assert type(file) == type(str())
+        output = run_file_in_trained_model(file)
+        assert type(output) == type(np.array([3]))
+        output_decoded = b64.b64decode(output)
+        assert type(output_decoded) == type(bytes())
+        
+    def test_send_image(self):
+        response = self.client.get("/download",query_string={"filename":"static/new_image.png"})
+        print(response)
+        print("")
+        assert response.status_code == 200
+        assert type(response.data) == type(bytes())
+
+
             
 if __name__ == "__main__":
     unittest.main()
