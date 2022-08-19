@@ -75,4 +75,15 @@ It's been developed using python, interactive python notebook (ipynb), Flask and
     ~~~
     Above is a method which returns a template rendering of process.html, which is a template sitting in the templates folder next to app.py module. 
 - import new model
+    model/get_model.py module calls another project where the model is being developed. 
+    ~~~
+    git clone https://gitlab2.eeecs.qub.ac.uk/40314811/final-project.git
+    ~~~
 - test procedure
+    In the testing subdirectory, contains all the tests for the app.
+    Please read https://flask.palletsprojects.com/en/1.1.x/testing/
+    for an overview of testing. This project uses unit test instead of pytest in this article but the process is much the same -  use the self.client object in the AppTestCase class to .get or .post, to different @app.route("/") in the app.py module and make assertions on the return (which will usually be a redering of a jinja2 page through flask). Particular difficulties I faved with this was the method url_for() within the template is translated as an undeclared variable, so you need to pass the method as a variable if rendering the page. 
+    ~~~
+        from flask import url_for
+        rendered_template = template.render({"url_for":url_for},image="/static/new_image.png")
+    ~~~
