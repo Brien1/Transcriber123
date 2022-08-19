@@ -7,6 +7,7 @@ It's been developed using python, interactive python notebook (ipynb), Flask and
     git clone https://github.com/Brien1/Transcriber123.git
     ~~~
     To clone the repository
+
 - install requirements
     ~~~
     pip install -r requirements.txt
@@ -82,8 +83,18 @@ It's been developed using python, interactive python notebook (ipynb), Flask and
 - test procedure
     In the testing subdirectory, contains all the tests for the app.
     Please read https://flask.palletsprojects.com/en/1.1.x/testing/
-    for an overview of testing. This project uses unit test instead of pytest in this article but the process is much the same -  use the self.client object in the AppTestCase class to .get or .post, to different @app.route("/") in the app.py module and make assertions on the return (which will usually be a redering of a jinja2 page through flask). Particular difficulties I faved with this was the method url_for() within the template is translated as an undeclared variable, so you need to pass the method as a variable if rendering the page. 
+    for an overview of testing. This project uses unit test instead of pytest in this article but the process is much the same -  use the self.client object in the AppTestCase class to .get or .post, to different @app.route("/") in the app.py module and make assertions on the return (which will usually be a redering of a jinja2 page through flask). Particular difficulties I faced with this was the method url_for() within the template is translated as an undeclared variable, so you need to pass the method as a variable if rendering the page. 
     ~~~
         from flask import url_for
         rendered_template = template.render({"url_for":url_for},image="/static/new_image.png")
     ~~~
+- test coverage
+    The requirements install coverage module. Running:
+    ~~~
+    coverage run testing/test_app.py
+    ~~~
+    Followed by:
+    ~~~
+    coverage report -m               
+    ~~~
+    Will show the percentage coverage of your tests.
