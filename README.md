@@ -89,7 +89,7 @@ It's been developed using python, interactive python notebook (ipynb), Flask and
         rendered_template = template.render({"url_for":url_for},image="/static/new_image.png")
     ~~~
 - test coverage
-    The requirements install coverage module. Running:
+    The requirements will install coverage module. Running:
     ~~~
     coverage run testing/test_app.py
     ~~~
@@ -97,4 +97,4 @@ It's been developed using python, interactive python notebook (ipynb), Flask and
     ~~~
     coverage report -m               
     ~~~
-    Will show the percentage coverage of your tests.
+    Will show the percentage coverage of your tests. Alternatively use the wizard coverage_tests.py module within the testing subdirectory.
