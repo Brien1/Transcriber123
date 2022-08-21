@@ -9,20 +9,18 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import librosa
 
+
+
 CURRENTDIR = os.path.dirname(os.path.realpath(__file__))
 PARENTDIR = os.path.dirname(CURRENTDIR)
 sys.path += [PARENTDIR,]
-# print(sys.path)
 from model import postprocess, preprocess
-
-
 UPLOAD_FOLDER = "user_loaded_content"
 MYDIR = os.path.dirname(__file__)
 MODEL1 = os.path.join(PARENTDIR,"model/model1.pkl")
 MODEL2 = os.path.join(PARENTDIR,"model/model2.pkl")
 
 app = Flask(__name__)
-
 app.config["UPLOAD_FOLDER"] = MYDIR + "/user_loaded_content"
 
 @app.route("/")

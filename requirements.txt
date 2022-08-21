@@ -6,3 +6,6 @@ librosa==0.9.1
 matplotlib==3.5.2
 ffmpeg==1.4
 coverage==6.4.4
+# SQLAlchemy==1.4.40 
+# flask-sqlalchemy==2.5.1 
+# greenlet==1.1.2
