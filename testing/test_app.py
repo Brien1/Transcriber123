@@ -61,7 +61,7 @@ class AppTestCase(unittest.TestCase):
         template = env.get_template("process.html",None)
         from flask import url_for
         rendered_template = template.render({"url_for":url_for},image="/static/new_image.png")
-        response = self.uploadsound()
+        response = self.test_uploadsound()
         from_file = rendered_template.replace("http://localhost:5000","")
         response_to_upload = (response.data).decode()
        

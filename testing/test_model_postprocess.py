@@ -13,7 +13,11 @@ class test_postprocess(unittest.TestCase):
     def test_show_image(self):
         loaded_test_audio, sr = librosa.load(os.path.join(CURRENTDIR,"A0-test.mp3"))
         loaded_test_audio = librosa.util.fix_length(data=loaded_test_audio,size=32702)
-        loaded_model = pickle.load(open(os.path.join(PARENTDIR,"model/model.pkl"), 'rb'))
+        f1 = pickle.load(open(os.path.join(PARENTDIR,"model/model1.pkl"), 'rb'))
+        f2 = pickle.load(open(os.path.join(PARENTDIR,"model/model2.pkl"), 'rb'))
+        
+        model_byte_string = f1+ f2
+        loaded_model = pickle.loads(model_byte_string)  
 
 
 
