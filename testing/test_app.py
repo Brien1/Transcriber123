@@ -36,7 +36,7 @@ class AppTestCase(unittest.TestCase):
         assert response.status_code == 200
         assert outputtext == response.get_data(as_text=True)
  
-    def uploadsound(self):
+    def test_uploadsound(self):
         file = os.path.join(CURRENTDIR, "A0-test.mp3")
         my_file = FileStorage(
         stream=open(file, "rb"),
