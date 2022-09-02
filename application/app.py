@@ -43,16 +43,21 @@ def upload_file():
     f= request.files.get("file1")
     temp_audio = os.path.join(app.config["UPLOAD_FOLDER"], "temp")
     extension = f.filename.split(".")[-1]
-    if extension not in ACCEPTED_FILE_TYPES:
-        return index(message= "Only "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted.")
     tempaudio = "temp." + extension
     static_audio = os.path.join((MYDIR + app.static_url_path),tempaudio)
     f.save(temp_audio)
-    f.save(static_audio)
-    output = run_file_in_trained_model(temp_audio)
-    postprocess.show_predicted_image(output)
-    return render_template("process.html", image = os.path.join(app.static_url_path,"new_image.png") , audio = os.path.join(app.static_url_path,tempaudio))
-
+    f.save(static_audio)    
+    try:
+        output = run_file_in_trained_model(temp_audio)
+        print(output)
+        postprocess.show_predicted_image(output)
+        return render_template("process.html", image = os.path.join(app.static_url_path,"new_image.png") , audio = os.path.join(app.static_url_path,tempaudio))
+    except Exception:
+        if extension not in ACCEPTED_FILE_TYPES:
+            return index(message= "Only "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted.")
+        else:
+            return index()
+    
 def run_file_in_trained_model(uploaded_audio_path):
     """Returns base64 string.. representation of image
 
@@ -65,8 +70,10 @@ def run_file_in_trained_model(uploaded_audio_path):
     f1=pickle.load(open(MODEL1,"rb"))
     f2=pickle.load(open(MODEL2,"rb"))
     model_byte_string = f1+ f2
-    loaded_model = pickle.loads(model_byte_string)    
+    loaded_model = pickle.loads(model_byte_string) 
+    
     audio, sr = librosa.load(uploaded_audio_path)
+ 
     audio_list = []
     audio_list.append(audio)
     audio_list_resized = preprocess.resizeaudio(audio_list,False)

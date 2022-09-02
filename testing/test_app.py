@@ -1,4 +1,5 @@
 import base64 as b64
+from wsgiref.util import request_uri
 import numpy as np
 import fileinput
 from http import client
@@ -13,8 +14,9 @@ sys.path += [PARENTDIR,]
 from application.app import app, run_file_in_trained_model
 from jinja2 import Environment, PackageLoader, select_autoescape, FunctionLoader as fl, FileSystemLoader
 from werkzeug.datastructures import FileStorage
-from flask import render_template, url_for
-
+from flask import render_template, url_for, Flask
+from flask_testing import LiveServerTestCase
+import urllib3
 
 class AppTestCase(unittest.TestCase):
     def setUp(self):
@@ -32,9 +34,10 @@ class AppTestCase(unittest.TestCase):
         templateenv = Environment(loader=templateloader)
         TEMPLATE_FILE = "application/templates/hello.html"
         template = templateenv.get_template(TEMPLATE_FILE)
-        outputtext = template.render()  # this is where to put args to the template renderer
+        outputtext = template.render(message="None")  # this is where to put args to the template renderer
         assert response.status_code == 200
-        assert outputtext == response.get_data(as_text=True)
+        resp_data = response.get_data(as_text=True)
+        assert outputtext == resp_data
  
     def test_uploadsound(self):
         file = os.path.join(CURRENTDIR, "A0-test.mp3")
@@ -54,18 +57,24 @@ class AppTestCase(unittest.TestCase):
         )
         
     def test_uploadfile(self):
+        
+        
+   
         env = Environment(
         autoescape=select_autoescape(),
         loader=FileSystemLoader(searchpath=PARENTDIR+"/application/templates/"),
         )   
-        template = env.get_template("process.html",None)
+        template = env.get_template("process.html", None)
         from flask import url_for
-        rendered_template = template.render({"url_for":url_for},image="/static/new_image.png")
+        rendered_template = template.render({"url_for":url_for},image="/static/new_image.png" , audio = os.path.join(app.static_url_path,"temp.mp3"))
+        # rendered_template = render_template("process.html", image = os.path.join(app.static_url_path,"new_image.png") , audio = os.path.join(app.static_url_path,"temp.mp3"))
         response = self.test_uploadsound()
         from_file = rendered_template.replace("http://localhost:5000","")
-        response_to_upload = (response.data).decode()
+        response_to_upload = response.text
        
+        assert response.status_code == 200
         assert from_file == response_to_upload
+        
   
     def test_run_trained_model(self):
         file = os.path.join(CURRENTDIR, "A0-test.mp3")
@@ -86,3 +95,4 @@ class AppTestCase(unittest.TestCase):
             
 if __name__ == "__main__":
     unittest.main()
+    
