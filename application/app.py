@@ -36,11 +36,15 @@ def upload_file():
         jinja2 rendering: process.html where image = output from model
     """
     f= request.files.get("file1")
-    uploaded_audio = app.config["UPLOAD_FOLDER"]+"/temp"
-    f.save(uploaded_audio)
-    output = run_file_in_trained_model(uploaded_audio)
+    temp_audio = os.path.join(app.config["UPLOAD_FOLDER"], "temp")
+    extension = f.filename.split(".")[-1]
+    tempaudio = "temp." + extension
+    static_audio = os.path.join((MYDIR + app.static_url_path),tempaudio)
+    f.save(temp_audio)
+    f.save(static_audio)
+    output = run_file_in_trained_model(temp_audio)
     postprocess.show_predicted_image(output)
-    return render_template("process.html", image = os.path.join(app.static_url_path,"new_image.png"))
+    return render_template("process.html", image = os.path.join(app.static_url_path,"new_image.png") , audio = os.path.join(app.static_url_path,tempaudio))
 
 def run_file_in_trained_model(uploaded_audio_path):
     """Returns base64 string.. representation of image

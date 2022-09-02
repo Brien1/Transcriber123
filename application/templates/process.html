@@ -1,15 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <style>
+    @media(max-width: 500px) {
+      .reverse-columns {
+        flex-direction: column-reverse;
+        display: flex;
+      }
+    }
+
+    .titled {
+      font-family: 'Merriweather', serif !important;
+      font-size: 58px !important;
+      font-weight: 400 !important;
+      line-height: 64px !important;
+    }
+
+    .subtitled {
+      font-family: 'Merriweather', serif !important;
+      font-size: 22px !important;
+      font-weight: 400 !important;
+      line-height: 36px !important;
+    }
+    .bread {
+        margin-top: 3%;
+        margin-left: 3%;
+    }
+  </style>
 </head>
 <body>
+    <nav class="breadcrumb bread" aria-label="breadcrumbs">
+        <ul>
+          <li><a href="/">Upload more music</a></li>
+          <li class="is-active"><a href="#" aria-current="page">Results</a></li>
+        </ul>
+      </nav>
 
-    <p>Processing complete</p>
-    <img src="{{ url_for('download_file', filename=image) }}">
-    <a href="{{ url_for('send_image', filename=image) }}">download</a>
+    <section class="hero is-white is-fullheight">
+        <div class="hero-body">
+          <div class="container">
+            <div class="columns  is-vcentered">
+              <div data-aos="fade-left" class="column
+              is-10-mobile is-offset-1-mobile
+              is-10-tablet is-offset-1-tablet
+              is-4-desktop is-offset-1-desktop
+              is-4-widescreen is-offset-1-widescreen
+              is-4-fullhd is-offset-1-fullhd">
+                <figure class="">
+                    <img src="{{ url_for('download_file', filename='/static/grandstave.png') }}">
+                    <img src="{{ url_for('download_file', filename=image) }}">
+                </figure>
+              </div>
+              <div data-aos="fade-down" class="column
+              is-10-mobile is-offset-1-mobile
+              is-10-tablet is-offset-1-tablet
+              is-5-desktop is-offset-1-desktop
+              is-5-widescreen is-offset-1-widescreen
+              is-5-fullhd is-offset-1-fullhd">
+                <h1 class="subtitled subtitled">
+                  Resulting sheet music from the Machine Learning Model. Press the button below to download!
+                </h1>
+                <a class="button button-yellow" href="{{ url_for('send_image', filename=image) }}">download</a>
+                <h2 class="subtitled subtitle">
+
+                  
+                </h2>
+              </div>
+    
+            </div>
+          </div>
+        </div>
+      </section>
+
+   
+    <!-- <audio controls>
+        <source src="{{ url_for('download_file', filename=audio) }}" type="audio/mpeg">
+    </audio> -->
+    <script>
+        new Typewriter('#typewriter', {
+          strings: ['typewriter', 'Effect', 'typewriter.js', 'example'],
+          autoStart: true,
+          loop: true,
+        });
+      </script>
+      <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+      <script>
+        AOS.init({
+          once: true
+        });
+      </script>
 </body>
 </html>
