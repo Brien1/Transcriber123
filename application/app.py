@@ -19,14 +19,18 @@ UPLOAD_FOLDER = "user_loaded_content"
 MYDIR = os.path.dirname(__file__)
 MODEL1 = os.path.join(PARENTDIR,"model/model1.pkl")
 MODEL2 = os.path.join(PARENTDIR,"model/model2.pkl")
+ACCEPTED_FILE_TYPES = ["mp3" , "ogg" , "flac" , "m4a" ]
+
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = MYDIR + "/user_loaded_content"
 
 @app.route("/")
-def index():
-    """Return Index page"""
-    return render_template("hello.html")
+def index(message = "None"):
+    """Return Index page, with option message variable.  
+    message is string format warning displayed under the upload button on hello.html
+    """
+    return render_template("hello.html", message = message)
 
 @app.route("/" , methods=['GET', 'POST'])
 def upload_file():
@@ -35,9 +39,12 @@ def upload_file():
     Returns:
         jinja2 rendering: process.html where image = output from model
     """
+    
     f= request.files.get("file1")
     temp_audio = os.path.join(app.config["UPLOAD_FOLDER"], "temp")
     extension = f.filename.split(".")[-1]
+    if extension not in ACCEPTED_FILE_TYPES:
+        return index(message= "Only "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted.")
     tempaudio = "temp." + extension
     static_audio = os.path.join((MYDIR + app.static_url_path),tempaudio)
     f.save(temp_audio)
