@@ -53,8 +53,13 @@ def upload_file():
         postprocess.show_predicted_image(output)
         return render_template("process.html", image = os.path.join(app.static_url_path,"new_image.png") , audio = os.path.join(app.static_url_path,tempaudio))
     except Exception:
-        if extension not in ACCEPTED_FILE_TYPES:
+        os.remove(temp_audio)
+        os.remove(static_audio)
+        if extension != "" and extension not in ACCEPTED_FILE_TYPES:
             return index(message= "Only "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted.")
+        if extension == "":
+            return index(message= "You did not select a file! \n "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted.")
+
         else:
             return index()
     

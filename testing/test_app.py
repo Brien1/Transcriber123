@@ -74,6 +74,19 @@ class AppTestCase(unittest.TestCase):
         follow_redirects = True,
         base_url='https://localhost:5000'
         )
+    def attempt_to_upload_nothing(self):
+        my_file = FileStorage(filename="")
+
+        return self.client.post(
+        "/",
+        data={
+            "file1": my_file,
+        },
+        content_type="multipart/form-data",
+        follow_redirects = True,
+        base_url='https://localhost:5000'
+        )
+        
         
     @staticmethod
     def set_up_templates(template):
@@ -87,7 +100,6 @@ class AppTestCase(unittest.TestCase):
         
         template = self.set_up_templates("process.html")
         rendered_template = template.render({"url_for":url_for},image="/static/new_image.png" , audio = os.path.join(app.static_url_path,"temp.mp3"))
-        # rendered_template = render_template("process.html", image = os.path.join(app.static_url_path,"new_image.png") , audio = os.path.join(app.static_url_path,"temp.mp3"))
         response = self.uploadsound()
         from_file = rendered_template.replace("http://localhost:5000","")
         response_to_upload = response.text
@@ -98,20 +110,24 @@ class AppTestCase(unittest.TestCase):
     def test_upload_bad_file_extension(self):
         
         template = self.set_up_templates("hello.html")
-        
-        rendered_template = template.render(message="Only "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted.")
+        expected_message =  "Only "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted."
+        rendered_template = template.render(message=expected_message)
         response = self.upload_non_sound()
         from_file = rendered_template.replace("http://localhost:5000","")
         response_to_upload = response.text
-       
         assert response.status_code == 200
-        for n,i in enumerate(from_file):
-            if (from_file[n] != response_to_upload[n]):
-                print(n , " ", from_file[n-10:n+40], " ", response_to_upload[n-10:n+40])
         assert from_file == response_to_upload
         
         
-        
+    def test_upload_no_file_selected(self):
+        template = self.set_up_templates("hello.html")
+        expected_message =  "You did not select a file! \n "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted."
+        rendered_template = template.render(message=expected_message)
+        response = self.attempt_to_upload_nothing()
+        from_file = rendered_template.replace("http://localhost:5000","")
+        response_to_upload = response.text
+        assert response.status_code == 200
+        assert from_file == response_to_upload
         
     def test_run_trained_model(self):
         file = os.path.join(CURRENTDIR, "A0-test.mp3")

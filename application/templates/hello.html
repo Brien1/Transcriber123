@@ -263,12 +263,12 @@
 
         </div>
       </div>
-      <a href="#" class="scroll-down is-hidden-mobile" address="true"></a>
+      <a href="#" id="down1" class="scroll-down is-hidden-mobile" address="true"></a>
     </div>
   </section>
 
-  <section class="hero is-white is-fullheight ok">
-    <div class="hero-body">
+  <section class="hero is-white is-fullheight section2">
+    <div class="hero-body" style="position: relative;">
       <div class="container">
         <div class="columns  is-vcentered">
           <div data-aos="fade-left" class="column
@@ -298,10 +298,11 @@
 
         </div>
       </div>
+      <a href="#" id="down2" class="scroll-down is-hidden-mobile" address="true"></a>
     </div>
   </section>
 
-  <section class="hero is-white is-fullheight ok3">
+  <section class="hero is-white is-fullheight section3">
     <div class="hero-body">
       <div class="container">
         <div class="columns  is-vcentered">
@@ -358,7 +359,6 @@
 
         </div>
       </div>
-      <a href="#" class="scroll-down is-hidden-mobile" address="true"></a>
     </div>
   </section>
 
@@ -471,16 +471,20 @@ document.addEventListener('DOMContentLoaded', () => {
       })
     }
   })
-  $(function() {
-    $('.scroll-down').click (function() {
-      $('html, body').animate({scrollTop: $('section.ok').offset().top }, 'slow');
-      return false;
-    });
-  });
+
   function loader_appears() {
     document.getElementById("loader").style.visibility = "visible"
     document.getElementById("loader2").style.visibility = "visible"
-
-
   }
+  $(function() {
+    $('#down1').click (function() {
+      $('html, body').animate({scrollTop: $('section.section2').offset().top }, 'slow');
+
+    })
+  })
+  $(function() {
+    $('#down2').click (function() {
+      $('html,body').animate({scrollTop: $('section.section3').offset().top }, 'slow')
+    })
+  })
 </script>
