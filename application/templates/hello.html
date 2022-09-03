@@ -350,9 +350,11 @@
                     </span>
                   </label>
                 </div>
-              <button class="button is-yellow" type="submit">Submit</button>
+              <button class="button is-yellow" onclick="loader_appears()" type="submit">Submit</button>
           </form>
+          <div id="loader2" class="dot hiddendots"></div>
           </div>
+          
 
         </div>
       </div>
@@ -477,5 +479,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   function loader_appears() {
     document.getElementById("loader").style.visibility = "visible"
+    document.getElementById("loader2").style.visibility = "visible"
+
+
   }
 </script>

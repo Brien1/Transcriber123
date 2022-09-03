@@ -1,4 +1,5 @@
 import base64 as b64
+import enum
 from wsgiref.util import request_uri
 import numpy as np
 import fileinput
@@ -11,7 +12,7 @@ CURRENTDIR = os.path.dirname(os.path.realpath(__file__))
 PARENTDIR = os.path.dirname(CURRENTDIR)
 ROOTDIR = os.path.dirname(PARENTDIR)
 sys.path += [PARENTDIR,]
-from application.app import app, run_file_in_trained_model
+from application.app import app, run_file_in_trained_model, ACCEPTED_FILE_TYPES
 from jinja2 import Environment, PackageLoader, select_autoescape, FunctionLoader as fl, FileSystemLoader
 from werkzeug.datastructures import FileStorage
 from flask import render_template, url_for, Flask
@@ -39,7 +40,8 @@ class AppTestCase(unittest.TestCase):
         resp_data = response.get_data(as_text=True)
         assert outputtext == resp_data
  
-    def test_uploadsound(self):
+    
+    def uploadsound(self):
         file = os.path.join(CURRENTDIR, "A0-test.mp3")
         my_file = FileStorage(
         stream=open(file, "rb"),
@@ -56,26 +58,61 @@ class AppTestCase(unittest.TestCase):
         base_url='https://localhost:5000'
         )
         
-    def test_uploadfile(self):
+    def upload_non_sound(self):
+        file = os.path.join(CURRENTDIR, "coverage_tests.py")
+        my_file = FileStorage(
+        stream=open(file, "rb"),
+        filename="coverage_tests.py",
+        )
+
+        return self.client.post(
+        "/",
+        data={
+            "file1": my_file,
+        },
+        content_type="multipart/form-data",
+        follow_redirects = True,
+        base_url='https://localhost:5000'
+        )
         
-        
-   
+    @staticmethod
+    def set_up_templates(template):
         env = Environment(
         autoescape=select_autoescape(),
         loader=FileSystemLoader(searchpath=PARENTDIR+"/application/templates/"),
         )   
-        template = env.get_template("process.html", None)
-        from flask import url_for
+        return env.get_template(template, None)
+    
+    def test_uploadfile(self):
+        
+        template = self.set_up_templates("process.html")
         rendered_template = template.render({"url_for":url_for},image="/static/new_image.png" , audio = os.path.join(app.static_url_path,"temp.mp3"))
         # rendered_template = render_template("process.html", image = os.path.join(app.static_url_path,"new_image.png") , audio = os.path.join(app.static_url_path,"temp.mp3"))
-        response = self.test_uploadsound()
+        response = self.uploadsound()
         from_file = rendered_template.replace("http://localhost:5000","")
         response_to_upload = response.text
        
         assert response.status_code == 200
         assert from_file == response_to_upload
         
-  
+    def test_upload_bad_file_extension(self):
+        
+        template = self.set_up_templates("hello.html")
+        
+        rendered_template = template.render(message="Only "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted.")
+        response = self.upload_non_sound()
+        from_file = rendered_template.replace("http://localhost:5000","")
+        response_to_upload = response.text
+       
+        assert response.status_code == 200
+        for n,i in enumerate(from_file):
+            if (from_file[n] != response_to_upload[n]):
+                print(n , " ", from_file[n-10:n+40], " ", response_to_upload[n-10:n+40])
+        assert from_file == response_to_upload
+        
+        
+        
+        
     def test_run_trained_model(self):
         file = os.path.join(CURRENTDIR, "A0-test.mp3")
         assert type(file) == type(str())
