@@ -39,7 +39,6 @@ def upload_file():
     Returns:
         jinja2 rendering: process.html where image = output from model
     """
-    
     f= request.files.get("file1")
     temp_audio = os.path.join(app.config["UPLOAD_FOLDER"], "temp")
     extension = f.filename.split(".")[-1]
@@ -79,8 +78,9 @@ def run_file_in_trained_model(uploaded_audio_path):
     
     audio, sr = librosa.load(uploaded_audio_path)
  
+    audio_arranged = preprocess.arrange_waveform_to_start_of_clip(audio)
     audio_list = []
-    audio_list.append(audio)
+    audio_list.append(audio_arranged)
     audio_list_resized = preprocess.resizeaudio(audio_list,False)
     output = loaded_model.predict(audio_list_resized)
     return output
