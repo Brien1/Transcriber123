@@ -50,20 +50,26 @@ def upload_file():
         output = run_file_in_trained_model(temp_audio)
         print(output)
         postprocess.show_predicted_image(output)
-        return render_template("process.html", image = os.path.join(app.static_url_path,"new_image.png") , audio = os.path.join(app.static_url_path,tempaudio))
+        return render_template("process.html", image = os.path.join(app.static_url_path,"new_image.png") , audio_path = os.path.join(app.static_url_path,tempaudio))
     except Exception:
+        accepted_files = ""
+        for n , i in enumerate(ACCEPTED_FILE_TYPES):
+            if n < (len(ACCEPTED_FILE_TYPES)-1):
+                accepted_files+= str(i) +", "
+            else:
+                accepted_files+=str(i)
         os.remove(temp_audio)
         os.remove(static_audio)
         if extension != "" and extension not in ACCEPTED_FILE_TYPES:
-            return index(message= "Only "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted.")
+            return index(message= "Only "+ accepted_files+" formats currently accepted.")
         if extension == "":
-            return index(message= "You did not select a file! \n "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted.")
+            return index(message= "You did not select a file! \n "+ accepted_files+" formats currently accepted.")
 
         else:
             return index()
     
 def run_file_in_trained_model(uploaded_audio_path):
-    """Returns base64 string.. representation of image
+    """Runs the temp.mp3 (save audio from upload) through ML model to get an output
 
     Args:
         uploaded_audio_path (str): path to uploaded audio
@@ -96,7 +102,6 @@ def download_file(filename):
         str: address of image file
     """
     try:
-        print("here")
         print(request.args.get('attachment'))
      
         filename=os.path.join(app.root_path, filename)
@@ -118,3 +123,12 @@ def send_image():
     filename=os.path.join(app.root_path, filename)
     print(filename)
     return send_file(filename,as_attachment=True)
+
+@app.route('/getaudio', methods=['GET'])
+def getaudio():
+    audio_path = request.args.get("audio_path")
+    audio_path = audio_path.strip("/")
+    audio_path = os.path.join(app.root_path, audio_path)
+    print("getting audio")
+    print(audio_path)
+    return audio_path

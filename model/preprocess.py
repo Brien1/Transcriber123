@@ -1,4 +1,4 @@
-import librosa,numpy as np
+import librosa,numpy as np, librosa.display, matplotlib.pyplot as plt
 LOUD = 0.030
 QUIET = 0.005
 def detect_note_sample_range(magnitude_envelope):
@@ -81,19 +81,21 @@ def compute_envelope(x, win_len_sec=0.01, Fs=4000):
         env_upper[i] = np.amax(x[i_start:i_end])
         env_lower[i] = np.amin(x[i_start:i_end])
     return env, env_upper, env_lower
+
 def arrange_waveform_to_start_of_clip(audio):
-    
-    
-
-
-   
+    """ if user presses record then there is a delay before audio, it's likely the the ML will not recognise the audio
+    audio needs to be arranged with the note attack at the start of the clip"""
 
     env, envupper,envlower = compute_envelope(audio,Fs=22050)
     notes = detect_note_sample_range(env)
-
-    print(notes)
-
-    return audio[notes[0][0]-300:35000]
+    # librosa.display.waveshow(audio)
+    # librosa.display.waveshow(audio[notes[0][0]-300:35000])
+    # plt.savefig("/Users/brienhall/Documents/Transcriber123/fig.jpg")
+    
+    if len(notes) == 0:
+        return audio
+    if len(notes) > 0 :
+        return audio[notes[0][0]-300:35000]
     
 
 
@@ -117,3 +119,6 @@ def resizeaudio(audio, max_l):
         
     return audio
 
+# audiowavetest = "/Users/brienhall/Downloads/My recording 11.wav"
+# audiowavetest,sr = librosa.load(audiowavetest)
+# arrange_waveform_to_start_of_clip(audiowavetest)
