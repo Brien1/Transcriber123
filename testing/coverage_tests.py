@@ -1,4 +1,4 @@
-"""Wizard, iterates through testing sub directory and requests if to run coverage test to specific module
+"""Wizard, iterates through testing sub directory and requests if user would like to run coverage test to specific module
 """
 import glob, os
 DIR = os.path.join(os.path.abspath(os.path.curdir),"testing")

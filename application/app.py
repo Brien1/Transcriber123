@@ -1,3 +1,9 @@
+""" Flask application instantiated here. All http requests to whatever the server happens to be pass through here.
+Returns rendering of html templates and injects code (variables, method names, parameters) into the html template with
+Jinja syntax (python style code) to allow dynamic features in the templates.
+Linked intrisically to static folder (objects like pictures, audio etc.) and templates (the skeletons the dynamic pages
+are build upon) """
+
 from crypt import methods
 import sys
 import os

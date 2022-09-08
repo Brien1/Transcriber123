@@ -29,6 +29,15 @@ class AppTestCase(unittest.TestCase):
     def tearDown(self):
         self.ctx.pop()
 
+
+    @staticmethod
+    def printdifferences_in_responses_templates(response_template_one,reponse_template_two):
+        """Takes template loaded from file & template loaded through Flask app and prints characters
+        where the templates don't match, useful for debugging assertion errors"""
+        for n, i in enumerate(response_template_one):
+            if response_template_one[n] != reponse_template_two[n]:
+                print(response_template_one[n-40:n+100],"\t",reponse_template_two[n-40:n+100])
+                
     def test_home(self):
         response = self.client.get("/")
         templateloader = FileSystemLoader(searchpath="./")
@@ -105,23 +114,26 @@ class AppTestCase(unittest.TestCase):
         response_to_upload = response.text
        
         assert response.status_code == 200
+       
+                
         assert from_file == response_to_upload
         
     def test_upload_bad_file_extension(self):
         
         template = self.set_up_templates("hello.html")
-        expected_message =  "Only "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted."
+        expected_message =  "Only mp3, ogg, flac, m4a formats currently accepted."
         rendered_template = template.render(message=expected_message)
         response = self.upload_non_sound()
         from_file = rendered_template.replace("http://localhost:5000","")
         response_to_upload = response.text
         assert response.status_code == 200
+        
         assert from_file == response_to_upload
         
         
     def test_upload_no_file_selected(self):
         template = self.set_up_templates("hello.html")
-        expected_message =  "You did not select a file! \n "+ ACCEPTED_FILE_TYPES.__str__()+" formats currently accepted."
+        expected_message =  "You did not select a file! \n mp3, ogg, flac, m4a formats currently accepted."
         rendered_template = template.render(message=expected_message)
         response = self.attempt_to_upload_nothing()
         from_file = rendered_template.replace("http://localhost:5000","")
